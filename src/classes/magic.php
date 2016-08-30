@@ -83,9 +83,9 @@ class magic {
 	/**
 	 * @param $function
 	 *
-	 * @return void
+	 * @return mixed
 	 */
-	public function callFunction($function){
+	private function callFunction($function){
 		$function   = new ReflectionFunction($function);
 		$parameters = $function->getParameters();
 		$count      = count($parameters)-1;
@@ -109,6 +109,18 @@ class magic {
 				$parameters[$count] = false;
 			}
 		}
-		$function->invokeArgs($parameters);
+		return $function->invokeArgs($parameters);
+	}
+
+	/**
+	 * @param $name
+	 *
+	 * @return bool|mixed
+	 */
+	public function callController($name){
+		if(isset($this->controllers[$name])){
+			return $this->callFunction($this->controllers[$name]);
+		}
+		return false;
 	}
 }
